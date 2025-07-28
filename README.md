@@ -1,53 +1,26 @@
-Here’s a clean, complete `README.md` tailored for your **Challenge 1b: Multi-Collection PDF Analysis** solution. It follows the submission guidelines, reflects your actual code, and is structured for Docker-based evaluation.
 
----
 
-### ✅ `README.md`
+### `README.md` for Challenge 1b
 
-```markdown
+````markdown
 # Challenge 1b: Multi-Collection PDF Analysis
 
-This solution performs persona-based content extraction from PDF collections. It processes one collection at a time based on a JSON configuration file and outputs structured analysis.
+This solution performs persona-based content extraction from multiple PDF collections. Each collection is processed based on the configuration inside it (`challenge1b_input.json`), and the tool outputs structured insights into `challenge1b_output.json`.
 
 ---
 
 ## 🚀 Features
 
-- Processes all PDFs listed in `challenge1b_input.json`
-- Embeds persona and task to guide relevance scoring
+- Processes PDFs inside folders named like `Collection 1`, `Collection 2`, etc.
+- Each folder must contain a `challenge1b_input.json` file
+- Embeds persona and task prompts to guide relevance scoring
 - Ranks extracted sections by semantic similarity
-- Outputs `challenge1b_output.json` with:
+- Outputs:
   - Top 10 relevant sections
   - Full subsection analysis
-- Fully offline execution (no internet calls)
+- Fully offline (no internet access required)
 
----
 
-## 🗂️ Expected Directory Structure
-
-```
-
-Challenge\_1b/
-├── Collection 1/
-│   ├── PDFs/
-│   ├── challenge1b\_input.json
-│   └── challenge1b\_output.json  ← (Generated)
-├── Collection 2/
-│   ├── PDFs/
-│   ├── challenge1b\_input.json
-│   └── challenge1b\_output.json
-├── Collection 3/
-│   ├── PDFs/
-│   ├── challenge1b\_input.json
-│   └── challenge1b\_output.json
-├── process\_collection.py
-├── requirements.txt
-├── Dockerfile
-└── README.md
-
-````
-
----
 
 ## 🐳 Docker Instructions
 
@@ -55,14 +28,30 @@ Challenge\_1b/
 
 ```bash
 docker build --platform linux/amd64 -t challenge1b .
-````
+```
 
-### ▶️ Run the Container (Example: Collection 1)
+### 🔁 Run for All Collections (Optional Bash Loop)
+
+If you're on a Unix-like system (Linux/macOS/WLS):
 
 ```bash
-docker run --rm \
-  -v "$(pwd)/Collection 1":/app/collection \
-  --network none \
-  challenge1b /app/collection
+for dir in Collection*/; do
+  docker run --rm \
+    -v "$(pwd)/$dir":/app/collection \
+    --network none \
+    challenge1b /app/collection
+done
 ```
+
+This will run the container once for each `Collection` folder in the current directory.
+
+---
+
+## 🔒 Notes
+
+* Make sure `challenge1b_input.json` is present inside each collection folder
+* No internet connection is required — works fully offline
+* Compatible with `linux/amd64` platforms
+
+---
 
